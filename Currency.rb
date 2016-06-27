@@ -31,6 +31,14 @@ class Currency
     end
   end
 
+  def type
+    @type
+  end
+
+  def value
+    @value
+  end
+
   def ==(other)
     if @type == other.type && @value == other.value
       return true
@@ -41,7 +49,8 @@ class Currency
 
   def +(other)
     if @type == other.type
-      return @value + other.value
+      new_value = @value + other.value
+      return Currency.new(@type, new_value)
     else
       raise DifferentCurrencyCodeError, "You cannot run this calculation between different currency types."
     end
@@ -49,21 +58,16 @@ class Currency
 
   def -(other)
     if @type == other.type
-      return @value - other.value
+      new_value = @value - other.value
+      return Currency.new(@type, new_value)
     else
       raise DifferentCurrencyCodeError, "You cannot run this calculation between different currency types."
     end
   end
 
   def *(other)
-    if other.is_a? Float
-      @value *= other
-    elsif other.is_a? Fixnum
-      other = other.to_f
-      @value *= other
-    else
-      raise BadFactorError, "This is not a valid factor."
-    end
+    new_value = @value * other
+    Currency.new(@type, new_value)
   end
 
 end
@@ -72,15 +76,15 @@ class DifferentCurrencyCodeError < StandardError; end
 class BadFactorError < StandardError; end
 class UnrecognizedCurrencyError < StandardError; end
 
-seashell = Currency.new("£", 10)
-seashell2 = Currency.new("GBP", 190.0)
-# whiskey_bottle = Currency.new("USD", 10)
+pounds = Currency.new("£", 10)
+pounds2 = Currency.new("GBP", 190.0)
+whiskey_bottle = Currency.new("USD", 10)
 
-# test_value = seashell.+(seashell2)
-test_sub = seashell.-(seashell2)
-test_multiply = seashell.*(11)
+test_value = pounds.+(pounds2)
+test_sub = pounds.-(pounds2)
+test_multiply = pounds.*(11)
 
-# test_clash = seashell.+(whiskey_bottle)
-# test_clash2 = seashell.-(whiskey_bottle)
-# seashell.==(seashell2)
-# whiskey_bottle.==(seashell)
+# test_clash = pounds.+(whiskey_bottle)
+# test_clash2 = pounds.-(whiskey_bottle)
+# pounds.==(pounds2)
+# whiskey_bottle.==(pounds)
