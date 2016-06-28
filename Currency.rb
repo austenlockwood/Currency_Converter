@@ -16,19 +16,13 @@ class Currency
   def initialize(type, value)
     if @@currency_symbols.has_value?(type)
       @type = type
-    elsif @@currency_symbols.has_key?(type) #if the class hash has what you wrote for type as a key, then
-      @type = @@currency_symbols.fetch(type) #you will reassign the associated value as the value for @type
+    elsif @@currency_symbols.has_key?(type)
+      @type = @@currency_symbols.fetch(type)
     else
       raise UnrecognizedCurrencyError, "This is not a recognized currency symbol."
     end
 
-    if value.is_a? Float
-      @value = value
-    elsif value.is_a? Fixnum
-      @value = value.to_f
-    else
-      raise BadFactorError, "This is not a valid factor."
-    end
+    @value = value.to_f
   end
 
   def type
